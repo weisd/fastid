@@ -19,8 +19,8 @@ const (
 	StartTimeEnvName = "FASTID_START_TIME"
 	//MachineIDEnvName is the env key for machine id
 	MachineIDEnvName           = "FASTID_MACHINE_ID"
-	defaultStartTimeStr        = "2018-06-01T00:00:00.000Z"
-	defaultStartTimeNano int64 = 1527811200000000000
+	defaultStartTimeStr        = "2020-12-01T00:00:00.000Z"
+	defaultStartTimeNano int64 = 1606780800000000000
 )
 
 //Config maintains the settings for id generating
@@ -126,7 +126,7 @@ func getStartEpochFromEnv() int64 {
 	startTimeStr := getEnv(StartTimeEnvName, defaultStartTimeStr)
 	var startEpochTime, err = time.Parse(time.RFC3339, startTimeStr)
 
-	if err == nil {
+	if err != nil {
 		return defaultStartTimeNano
 	}
 
@@ -140,7 +140,7 @@ func getIP() (net.IP, error) {
 				if !ipNet.IP.IsLoopback() && ipNet.IP.To4() != nil {
 					ip := ipNet.IP.To4()
 
-					if ip[0] == 10 || ip[0] == 172 && (ip[1] >= 16 && ip[1] < 32) || ip[0] == 192 && ip[1] == 168 {
+					if ip[0] == 10 || (ip[0] == 172 && (ip[1] >= 16 && ip[1] < 32)) || (ip[0] == 192 && ip[1] == 168) {
 						return ip, nil
 					}
 				}
